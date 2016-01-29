@@ -1,2 +1,2 @@
 # BBSeed
-Contains Sample projects and Backbase setup script
+Contains sample projects and Backbase setup script
