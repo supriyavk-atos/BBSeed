@@ -1,0 +1,7 @@
+[backbase]
+database ansible_ssh_host=192.168.10.50
+web ansible_ssh_host=192.168.10.51
+
+[backbase:vars]
+ansible_ssh_port=22
+

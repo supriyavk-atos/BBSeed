@@ -1,0 +1,25 @@
+---
+ # - name: Install Perl
+ #   include: "{{common_folder}}/rpm.yml"
+ #   vars:
+ #     rpm_app_name: PERL
+ #     rpm_filename: "{{ perl_rpm }}"
+#
+  - name: Install Git Yum Repository
+    include: "{{common_folder}}/rpm.yml"
+    vars:
+      rpm_app_name: GIT yum repository
+      rpm_filename: wandisco-git-release-7-1.noarch.rpm
+
+  - name: Install Git Perl
+    include: "{{common_folder}}/rpm.yml"
+    vars:
+      rpm_app_name: GIT_PERL
+      rpm_filename: perl-Git-2.4.1-1.WANdisco.259.noarch.rpm
+
+  - name: Install Git SCM
+    include: "{{common_folder}}/rpm.yml"
+    vars:
+      rpm_app_name: GIT_SCM
+      rpm_filename: git-2.4.1-1.WANdisco.259.x86_64.rpm
+

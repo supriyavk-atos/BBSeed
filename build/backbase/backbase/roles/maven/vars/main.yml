@@ -1,0 +1,5 @@
+destination : "/home/europa"
+#destination : "/root"
+group: "europa"
+user: "europa"
+role: "maven"

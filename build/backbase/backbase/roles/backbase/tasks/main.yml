@@ -1,0 +1,64 @@
+---
+#- name: Copy to .m2 folder
+#  copy:
+#     src=../files/cache/settings.xml
+#     dest={{destination}}/.m2/
+#     mode=0777
+
+- name: Create Backbase archetype project
+  command: sudo -u {{ user }} /usr/local/maven/default/bin/mvn archetype:generate -DarchetypeGroupId=com.backbase.launchpad -DarchetypeArtifactId=launchpad-archetype-CXP5.6 -DarchetypeVersion=1.1.0 -DgroupId=com.bbportal.training -DartifactId=BackbasePortal -Dversion=1.0 -Dpackage=com.bbportal.training -Dlaunchpad-version=0.13.1 -Dlaunchpad-edition=universal
+
+- name: Copy Backbase project to another folder
+  copy:
+     src=./BackbasePortal
+     dest=/home/
+     mode=0755 
+     owner=europa
+
+- name: Move Backbase archetype project to other location
+  command: sudo rm -rf BackbasePortal
+
+- name: Configure bowerrc file
+  template: 
+     src=.bowerrc 
+     dest={{backbase_dest}}/statics/collection/
+#     group="{{group}}" 
+#     owner="{{user}}"
+#     
+#- name: Copy to bowerrc file 
+#  copy:
+#     src=../files/cache/.bowerrc
+#     dest={{backbase_dest}}/statics/collection/
+
+- name: Copy local properties file
+  template: 
+     src=local.properties 
+     dest={{backbase_dest}}/configuration/src/main/filters/
+     group="{{group}}" 
+     owner="{{user}}"   
+#- name: Copy local-mysql properties file
+#  template: 
+#     src=local-mysql.properties 
+#     dest={{backbase_dest}}/configuration/src/main/filters/
+#     group="{{group}}" 
+#     owner="{{user}}"   
+#- name: Copy to local-properties for MySQL
+#  copy:
+#     src=../files/cache/local-mysql.properties
+#     dest={{backbase_dest}}/configuration/src/main/filters/
+#     mode=0777
+
+#- name: Configure pom file
+#  template: 
+#     src=pom.xml 
+#     dest={{backbase_dest}}/configuration/pom.xml
+#     group="{{group}}" 
+#     owner="{{user}}"
+
+- name: Run the mvn project
+  command: sudo -u {{ user }} /usr/local/maven/default/bin/mvn clean package -Pclean-database
+  args:
+    chdir: /home/BackbasePortal 
+    #chdir: {{backbase_dest}} 
+#- name: Run the mvn project
+#  command: cd {{backbase_dest}} && sudo -u {{ user }} /usr/local/maven/default/bin/mvn clean package -Pclean-database

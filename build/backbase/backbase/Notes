@@ -1,0 +1,5 @@
+To develop and test:
+ansible-playbook run.yml
+
+To deploy in production on VM's:
+ansible-playbook --inventory bronze.inv backbase.yml

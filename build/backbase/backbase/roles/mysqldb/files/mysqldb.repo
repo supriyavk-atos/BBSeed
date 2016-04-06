@@ -1,0 +1,6 @@
+[mysqldb]
+name = MySQLDB
+baseurl = http://repo.mysql.com/yum/mysql-5.7-community/el/7/x86_64/ 
+#baseurl = http://repo.mysql.com/yum/mysql-tools-community/el/6/x86_64/
+gpgkey=http://repo.mysql.com/RPM-GPG-KEY-mysql
+gpgcheck=1

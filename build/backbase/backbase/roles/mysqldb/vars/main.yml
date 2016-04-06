@@ -1,0 +1,4 @@
+db_user     : mysql
+db_pwd      : Passw0rd!
+bb_user : backbase
+#bb_pwd : Passw0rd!

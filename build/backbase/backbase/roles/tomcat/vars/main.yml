@@ -1,0 +1,5 @@
+tomcat_dir: "/usr/local/tomcat/apache-tomcat-7.0.67"
+group: "europa"
+user: "europa"
+role: "tomcat"
+jar_path: "roles/tomcat/templates"

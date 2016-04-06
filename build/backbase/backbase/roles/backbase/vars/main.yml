@@ -1,0 +1,4 @@
+destination: "/root"
+backbase_dest: "/home/BackbasePortal"
+port: "8080"
+host: "localhost"

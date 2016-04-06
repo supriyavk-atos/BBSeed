@@ -1,0 +1,37 @@
+---
+- name: Copying MySQL common to remote host
+  copy:
+    src=cache/mysql-community-release-el6-5.noarch.rpm
+    dest=/tmp/mysql-community-release-el6-5.noarch.rpm
+#- name: Installing the MySQLDB YUM repository file
+#  copy: 
+#      src=mysqldb.repo 
+#      dest=/etc/yum.repos.d/mysqldb.repo
+
+- name: Installing MySQL Server file
+  yum:
+    name=/tmp/mysql-community-release-el6-5.noarch.rpm
+    state=present
+
+- name: Installing MySQLDB
+  yum: name={{item}} 
+       state=present
+  with_items:
+    - mysql-server
+
+- name: Starting the MySQLDB Server
+  service: name=mysql state=started enabled=yes
+
+
+#- name: Installing MySQL Server file
+ # yum:
+ #   name=/tmp/mysql-community-server-5.7.10-1.el7.i686.rpm
+ #   state=present
+
+#- name: Starting the MySQLDB Server
+#  service: name=mysqld state=started enabled=yes
+
+#- name: Removing the MYSQL file after installation
+#  file:
+#    name=/tmp/mysql-*.rpm
+#    state=absent

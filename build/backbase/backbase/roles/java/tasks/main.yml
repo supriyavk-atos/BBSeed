@@ -1,0 +1,8 @@
+---
+#- name: Check if Java is installed
+#  stat: path=/usr/java/jdk1.7.0_80
+#  register: java_exists
+#
+- name: Install Java
+  include: ../files/install_java.yml
+#  when: java_exists.stat.exists == false

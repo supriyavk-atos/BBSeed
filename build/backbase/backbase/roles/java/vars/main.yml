@@ -1,0 +1,5 @@
+#user  : "root"
+#user  : "europa"
+#destination: /root
+destination: /home/europa
+role: "java"

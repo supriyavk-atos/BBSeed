@@ -1,0 +1,60 @@
+- name: Stop Tomcat if Tomcat instance is running
+  #service: name={{ tomcat_instance }} state=restarted enabled=yes
+  command: sh {{ tomcat_dir }}/bin/shutdown.sh
+  ignore_errors: True
+
+- name: remove any old portalserver deployed app
+  file: path={{tomcat_dir}}/webapps/portalserver.war state=absent
+  ignore_errors: True
+  
+- name: remove any old contentservices deployed app
+  file: path={{tomcat_dir}}/webapps/contentservices.war state=absent
+  ignore_errors: True
+ 
+- name: remove any old orchestrator deployed app
+  file: path={{tomcat_dir}}/webapps/orchestrator.war state=absent
+  ignore_errors: True
+  
+- name: remove any old orchestrator deployed app
+  file: path={{tomcat_dir}}/webapps/solr.war state=absent
+  ignore_errors: True
+  
+- name: Copy portalserver war into tomcat webapps
+  copy: src={{backbase_dir}}/webapps/portalserver/target/portalserver.war dest={{tomcat_dir}}/webapps/portalserver.war
+
+- name: Copy contentservices war into tomcat webapps
+  copy: src={{backbase_dir}}/webapps/contentservices/target/contentservices.war dest={{tomcat_dir}}/webapps/contentservices.war
+
+- name: Copy orchestrator war into tomcat webapps
+  copy: src={{backbase_dir}}/webapps/orchestrator/target/orchestrator.war dest={{tomcat_dir}}/webapps/orchestrator.war
+
+- name: Copy contentservices war into tomcat webapps
+  copy: src={{backbase_dir}}/webapps/solr/target/solr.war dest={{tomcat_dir}}/webapps/solr.war
+    
+- name: remove tomcat portal config file
+  file: path={{tomcat_dir}}/conf/Catalina/localhost/portalserver.xml state=absent
+  ignore_errors: True
+  
+- name: remove tomcat contentservices config file
+  file: path={{tomcat_dir}}/conf/Catalina/localhost/contentservices.xml state=absent
+  ignore_errors: True
+  
+- name: remove tomcat orchestrator config file
+  file: path={{tomcat_dir}}/conf/Catalina/localhost/orchestrator.xml state=absent
+  ignore_errors: True
+  
+- name: Copy tomcat portal config file
+  copy: src={{ backbase_dir }}/configuration/target/configuration/local/tomcat/portal/context.xml dest={{tomcat_dir}}/conf/Catalina/localhost/portalserver.xml
+
+- name: Copy tomcat content services config file
+  copy: src={{ backbase_dir }}/configuration/target/configuration/local/tomcat/contentservices/context.xml dest={{tomcat_dir}}/conf/Catalina/localhost/contentservices.xml
+
+- name: Copy tomcat orchestrator config file
+  copy: src={{ backbase_dir }}/configuration/target/configuration/local/tomcat/orchestrator/context.xml dest={{tomcat_dir}}/conf/Catalina/localhost/orchestrator.xml
+
+- name: Start Tomcat
+  #service: name={{ tomcat_instance }} state=restarted enabled=yes
+  command: sudo -u {{ user }} sh {{ tomcat_dir }}/bin/startup.sh
+
+- name: wait for tomcat to start
+  wait_for: port={{ tomcat_http_port }} delay=10

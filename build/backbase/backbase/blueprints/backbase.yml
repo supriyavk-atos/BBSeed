@@ -1,0 +1,12 @@
+---
+- name: Provisioning Database
+  hosts: database
+  roles:
+      - ../../roles/mysqldb
+
+- name: Provisioning Webserver
+  hosts: web
+  roles:
+      - ../../roles/java
+      - ../../roles/tomcat
+

@@ -1,0 +1,70 @@
+---
+- name: Copying MySQL common to remote host
+  copy:
+    src=cache/mysql-community-common-5.7.10-1.el7.x86_64.rpm
+    dest=/tmp/mysql-community-common-5.7.10-1.el7.x86_64.rpm
+
+- name: Copying MySQL libs to remote host
+  copy:
+    src=cache/mysql-community-libs-5.7.10-1.el7.x86_64.rpm
+    dest=/tmp/mysql-community-libs-5.7.10-1.el7.x86_64.rpm
+
+- name: Copying MySQL Client to remote host
+  copy:
+    src=cache/mysql-community-client-5.7.10-1.el7.x86_64.rpm
+    dest=/tmp/mysql-community-client-5.7.10-1.el7.x86_64.rpm
+
+- name: Copying MySQL Server dependency to remote host
+  copy:
+    src=cache/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+    dest=/tmp/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+
+- name: Copying MySQL Server to remote host
+  copy:
+    src=cache/mysql-community-server-5.7.10-1.el7.x86_64.rpm
+    dest=/tmp/mysql-community-server-5.7.10-1.el7.x86_64.rpm
+
+#- name: Installing MySQL Common file
+#  yum:
+#    name=/tmp/mysql-community-common-5.7.10-1.el7.x86_64.rpm
+#    state=present
+#    
+- name: Installing MySQL Libs file
+  yum:
+    name=/tmp/mysql-community-libs-5.7.10-1.el7.x86_64.rpm
+    state=present
+
+- name: Installing MySQL Client file
+  yum:
+    name=/tmp/mysql-community-client-5.7.10-1.el7.x86_64.rpm
+    state=present
+        
+- name: Installing MySQL Server dependency
+  yum:
+    name=/tmp/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+    state=present
+
+- name: Installing MySQL Server file
+  yum:
+    name=/tmp/mysql-community-server-5.7.10-1.el7.x86_64.rpm
+    state=present
+
+- name : Install config file
+  template : 
+      src="my.cnf" 
+      dest="/etc/"
+      mode=0777
+    
+- name: Starting the MySQLDB Server
+  service: name=mysqld state=started enabled=yes
+
+- name: Creating a read and write user to access the server remotely
+  mysql_user: name={{db_user}} host="%" password={{db_pwd}} priv=*.*:SELECT,INSERT,UPDATE,DELETE,CREATE,DROP state=present
+
+- name: Creating a read and write user to access the server locally (via the loopback interface)
+  mysql_user: name={{bb_user}} host="localhost" password={{db_pwd}} priv=*.*:SELECT,INSERT,UPDATE,DELETE,CREATE,DROP state=present
+   
+- name: Removing the MYSQL file after installation
+  file:
+    name=/tmp/mysql-*.rpm
+    state=absent

@@ -1,0 +1,39 @@
+---
+- name: Copying Java JDK 7u80-x64 rpm to remote host
+  copy:
+    src=cache/jdk-7u80-linux-x64.rpm
+    dest=/tmp/jdk-7u80-linux-x64.rpm
+
+- name: Installing Java JDK 7u80-x64 file
+  yum:
+    name=/tmp/jdk-7u80-linux-x64.rpm
+    state=present
+  
+#- name: Creating symbolic links for default and latest versions of Java
+#  file:
+#      src=/usr/java/jdk1.7.0_80
+#      path=/usr/java/{{item}}
+#      state=link
+#      force=yes
+#  with_items:
+#      - default
+#      - latest
+#      
+#- name: Creating JAVA_HOME variable
+#  lineinfile:
+  # dest=/home/{{user}}/.bash_profile
+#   dest={{destination}}/.bash_profile
+#    insertafter="# User specific.*"
+#    line="JAVA_HOME=/usr/java/default"
+
+#- name: Adding JAVA_HOME to the PATH with '/bin'
+#  lineinfile:
+#   dest={{destination}}/.bash_profile
+#    insertafter="PATH.*bin"
+#    line="PATH=$PATH:$JAVA_HOME/bin"
+  #when: has_bin_folder == true
+
+- name: Removing the Java JDK file after installation
+  file:
+    name=/tmp/jdk-7u80-linux-x64.rpm
+    state=absent

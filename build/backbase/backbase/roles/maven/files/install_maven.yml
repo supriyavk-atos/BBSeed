@@ -1,0 +1,90 @@
+---
+- name: Creating maven folder
+  file:
+    path=/usr/local/maven
+    state=directory
+    mode=0755 
+  
+- name: Unzipping maven
+  unarchive:
+    src=cache/apache-maven-3.3.3-bin.zip
+    dest=/usr/local/maven 
+    copy=yes
+    
+- name: Creating symbolic links for default and latest versions of Maven
+  file:
+      src=/usr/local/maven/apache-maven-3.3.3
+      path=/usr/local/maven/{{item}}
+      state=link
+      force=yes
+  with_items:
+      - default
+      - latest
+      
+#- name: Create Maven symbolic link
+#  file:
+#      src=/usr/local/maven/default/bin/mvn
+#      dest=/bin/mvn
+#      state=link
+#      mode=0755
+      
+- name: Creating MAVEN_HOME variable
+  lineinfile:
+  # dest=/home/{{user}}/.bash_profile
+    dest={{destination}}/.bash_profile
+    insertafter="# User specific.*"
+    line="M2_HOME=/usr/local/maven/default"
+
+- name: Creating MAVEN_OPTS variable
+  lineinfile:
+  # dest=/home/{{user}}/.bash_profile
+    dest={{destination}}/.bash_profile
+    insertafter="# User specific.*"
+    line="MAVEN_OPTS=-Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
+
+- name: Adding M2_HOME to the PATH with '/bin'
+  lineinfile:
+  # dest=/home/{{user}}/.bash_profile
+    dest={{destination}}/.bash_profile
+    insertafter="PATH.*bin"
+    line="PATH=$PATH:$M2_HOME/bin"
+  #when: has_bin_folder == true
+
+- name: Creating .m2 folder
+  file:
+    path={{destination}}/.m2
+    state=directory
+    group="{{group}}" 
+    owner="{{user}}"
+#    mode=0660 
+    
+- name: Copy settings.xml to .m2 location
+  template: 
+     src=settings.xml 
+     dest={{destination}}/.m2/
+     group="{{group}}" 
+     owner="{{user}}"
+
+- name: Creating repository folder
+  file:
+    path={{destination}}/.m2/repository
+    state=directory
+    group="{{group}}" 
+    owner="{{user}}"
+         
+#
+#- include: "{{commons_folder}}/install_tool.yml"
+#    vars:
+#      tool_name : Maven
+#      folder_name : "{{ maven_folder }}"
+#      zip_filename: "{{ maven_zipfile }}"
+#      add_version_to_folder : false
+#      zip_has_folder : true
+#      has_bin_folder : true
+#
+#  - name: Create Maven symbolic link
+#    file:
+#      src=/usr/local/maven/default/bin/mvn
+#      dest=/bin/mvn
+#      state=link
+#      mode=0755

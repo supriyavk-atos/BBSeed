@@ -1,0 +1,15 @@
+---
+- name: Check if Maven installed
+  stat: path=/usr/local/maven
+  register: maven_exists
+#  
+#- name: Check if Maven installed
+#  stat: echo $M2_HOME
+#  register: maven_exists
+
+- name: Install Maven
+  include: ../files/install_maven.yml
+  when: maven_exists.stat.exists == false
+
+
+

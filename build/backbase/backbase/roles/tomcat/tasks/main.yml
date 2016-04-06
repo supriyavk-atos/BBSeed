@@ -1,0 +1,11 @@
+---
+- name: Check if Tomcat is installed
+  stat: path=/usr/local/tomcat
+  register: tomcat_exists
+
+- name: Install Tatomc
+  include: ../files/install_tomcat.yml
+  when: tomcat_exists.stat.exists == false
+
+
+

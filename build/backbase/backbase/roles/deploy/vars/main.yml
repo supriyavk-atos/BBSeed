@@ -1,0 +1,4 @@
+backbase_dir: "/home/BackbasePortal"
+tomcat_dir: "/usr/local/tomcat/apache-tomcat-7.0.67"
+tomcat_http_port: "8080"
+user: "europa"
